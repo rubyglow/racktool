@@ -1,3 +1,6 @@
+// rackproxy - low level serialization of Rack and plugin metadata
+// For use by a higher-level program
+
 #include "fsnames.hpp"
 #include "plugin.hpp"
 #include "util/common.hpp"
@@ -13,6 +16,21 @@
 #else
 	#include <dlfcn.h>
 #endif
+
+#define BLURB "rackproxy %s (Rack API level %s)\n"
+
+#define USAGE \
+"For use by a higher level program\n" \
+"Usage: rackproxy COMMAND [DIRECTORY]\n" \
+"\n" \
+"Commands:\n" \
+"version:            Show the rackproxy version and exit\n" \
+"help:               Show this help text and exit\n" \
+"environment:        Get basic program version and Rack directory info as JSON\n" \
+"plugins DIRECTORY:  Get meta data about the plugins in DIRECTORY (recursively) as JSON\n"
+
+std::string appVersion = TOSTRING(VERSION);
+std::string apiLevel = "0.6";
 
 using namespace rack;
 
@@ -136,23 +154,28 @@ static bool loadAllPlugs() {
 }
 
 int main(int argc, char* argv[]) {
-	std::string libraryPath;
-	tagsInit();
-
-	if(argc == 1) {
-		loadAllPlugs();
+	if(argc < 2 || argc > 3) {
+		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		printf(USAGE);
+		return 1;
 	}
-	else if(argc == 2) {
-		libraryPath = argv[1];
-		loadPlug(libraryPath);
+	if(!strcmp(argv[1], "version") && argc == 2) {
+		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		return 0;
+	}
+	else if(!strcmp(argv[1], "environment") && argc == 2) {
+		printf("environment\n");
+	}
+	else if(!strcmp(argv[1], "plugins") && argc == 3) {
+		tagsInit();
+		loadAllPlugs();
+		pluginDestroy();
 	}
 	else {
-		printf("Usage: %s [plugin directory]", argv[0]);
-		return -1;
+		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		printf(USAGE);
+		return 1;
 	}
-	
-	// Unload all plugins
-	pluginDestroy();
-	
+
 	return 0;
 }

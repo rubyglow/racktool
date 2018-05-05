@@ -1,5 +1,7 @@
 # Build rackproxy
 
+VERSION = 0.6.0-beta.1
+
 # Remember to: export RACK_DIR=/path/to/Rack (the full Rack sourcetree)
 ifndef RACK_DIR
 $(error RACK_DIR is not defined)
@@ -10,6 +12,9 @@ SOURCES += $(wildcard src/*.cpp)
 
 # Include local + Rack includes
 FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
+
+# Program version
+FLAGS += -DVERSION=$(VERSION)
 
 # Generate dependency files alongside the object files
 FLAGS += -MMD -MP
