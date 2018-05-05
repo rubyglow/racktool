@@ -8,8 +8,8 @@ endif
 # Add .cpp and .c files to the build
 SOURCES += $(wildcard src/*.cpp)
 
-# Include Rack includes
-FLAGS += -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
+# Include local + Rack includes
+FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 
 # Generate dependency files alongside the object files
 FLAGS += -MMD -MP
