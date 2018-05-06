@@ -21,13 +21,14 @@
 
 #define USAGE \
 "For use by a higher level program\n" \
-"Usage: rackproxy COMMAND [DIRECTORY]\n" \
+"Usage: rackproxy COMMAND [DIRECTORY | FILE]\n" \
 "\n" \
 "Commands:\n" \
 "version:            Show the rackproxy version and exit\n" \
 "help:               Show this help text and exit\n" \
 "environment:        Get basic program version and Rack directory info as JSON\n" \
-"plugins DIRECTORY:  Get meta data about the plugins in DIRECTORY (recursively) as JSON\n"
+"plugins DIRECTORY:  Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
+"plugin FILE:        Get meta data about the plugin library FILE (or 'core') as JSON\n"
 
 std::string appVersion = TOSTRING(VERSION);
 std::string apiLevel = "0.6";
@@ -159,7 +160,7 @@ int main(int argc, char* argv[]) {
 		printf(USAGE);
 		return 1;
 	}
-	if(!strcmp(argv[1], "version") && argc == 2) {
+	else if(!strcmp(argv[1], "version") && argc == 2) {
 		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
 		return 0;
 	}
@@ -170,6 +171,9 @@ int main(int argc, char* argv[]) {
 		tagsInit();
 		loadAllPlugs();
 		pluginDestroy();
+	}
+	else if(!strcmp(argv[1], "plugin") && argc == 3) {
+		printf("plugin file %s", argv[2]);
 	}
 	else {
 		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
