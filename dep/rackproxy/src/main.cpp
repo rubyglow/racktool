@@ -32,11 +32,12 @@
 
 std::string appVersion = TOSTRING(VERSION);
 std::string apiLevel = "0.6";
+FsNames *fsNames;
 
 using namespace rack;
 
 // Print plugin metadata to screen
-static bool printPlugin(Plugin *plugin) {
+bool printPlugin(Plugin *plugin) {
 	printf("Slug: %s\n", plugin->slug.c_str());
 	printf("Version: %s\n", plugin->version.c_str());
 	printf("\nModules:\n");
@@ -59,15 +60,9 @@ static bool printPlugin(Plugin *plugin) {
 }
 
 // Load one plugin
-static bool loadPlug(std::string path) {
+bool loadPlug(std::string path) {
 	std::string libraryFilename;
-#if ARCH_LIN
-	libraryFilename = path + "/" + "plugin.so";
-#elif ARCH_WIN
-	libraryFilename = path + "/" + "plugin.dll";
-#elif ARCH_MAC
-	libraryFilename = path + "/" + "plugin.dylib";
-#endif
+	libraryFilename = path + "/" + fsNames->stdLibName;
 
 	// Check file existence
 	if (!systemIsFile(libraryFilename)) {
@@ -130,9 +125,7 @@ static bool loadPlug(std::string path) {
 }
 
 // Load all plugins
-static bool loadAllPlugs() {
-	// Get the standard Rack directories
-	FsNames *fsNames = getFsNames();
+bool loadAllPlugs() {
 	printf("Loading all plugins in your Rack plugins directory %s + core\n\n", fsNames->stdPluginDir.c_str());
 
 	// Load the built-in core plugin
@@ -155,6 +148,9 @@ static bool loadAllPlugs() {
 }
 
 int main(int argc, char* argv[]) {
+	// Get the standard Rack directories
+	fsNames = getFsNames();
+	
 	if(argc < 2 || argc > 3) {
 		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
 		printf(USAGE);

@@ -1,4 +1,4 @@
-// Standard filesystem names defined by Rack
+// Operating system dependent standard filesystem names defined by Rack
 
 #include "fsnames.hpp"
 
@@ -23,7 +23,7 @@
 static FsNames *fsNames;
 static bool isInit = false; // Has the statically held copy been initialized?
 
-// Get the standard names and initialize a static instance of FsNames
+// Initialize names once
 static void init() {
 	fsNames = new FsNames();
 	std::string homeDir;
@@ -36,6 +36,7 @@ static void init() {
 	
 	fsNames->stdRackDir = homeDir + "/Documents/Rack";
 	fsNames->stdPluginDir = fsNames->stdRackDir + "/plugins";
+	fsNames->stdLibName = "plugin.dylib";
 #endif
 
 #if ARCH_WIN
@@ -46,9 +47,11 @@ static void init() {
 	
 	fsNames->stdRackDir = docsDir + "/Rack";
 	fsNames->stdPluginDir = fsNames->stdRackDir + "/plugins";
+	fsNames->stdLibName = "plugin.dll";
 #endif
 
 #if ARCH_LIN
+	// Get home directory
 	const char *home = getenv("HOME");
 	if (!home) {
 		struct passwd *pw = getpwuid(getuid());
@@ -58,12 +61,13 @@ static void init() {
 	
 	fsNames->stdRackDir = homeDir + "/.Rack";
 	fsNames->stdPluginDir = fsNames->stdRackDir + "/plugins";
+	fsNames->stdLibName = "plugin.so";
 #endif
 
 	isInit = true;
 }
 
-// Return the standard names
+// Return the standard filesystem names defined by Rack
 FsNames *getFsNames() {
 	if (!isInit) init();
 	return fsNames;
