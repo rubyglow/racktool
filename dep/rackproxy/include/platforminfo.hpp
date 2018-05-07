@@ -5,20 +5,20 @@
 
 struct PlatformInfo {
 	const std::string appVersion = TOSTRING(VERSION);
-    const std::string apiLevel = TOSTRING(API_LEVEL);
+	const std::string apiLevel = TOSTRING(API_LEVEL);
 
 #if ARCH_MAC
-    const std::string os = "mac";
+	const std::string os = "mac";
 #endif
 
 #if ARCH_WIN
-    const std::string os = "win";
+	const std::string os = "win";
 #endif
 
 #if ARCH_LIN
-    const std::string os = "lin";
+	const std::string os = "lin";
 #endif
 
-    // Serialize various version and platform info
-    std::string serialize(FsNames *fsNames);
+	// Serialize various version and platform info
+	std::string serialize(FsNames *fsNames);
 };
