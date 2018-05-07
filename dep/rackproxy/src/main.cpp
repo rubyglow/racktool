@@ -2,6 +2,8 @@
 // For use by a higher-level program
 
 #include "fsnames.hpp"
+#include "platforminfo.hpp"
+
 #include "plugin.hpp"
 #include "util/common.hpp"
 
@@ -26,12 +28,11 @@
 "Commands:\n" \
 "version:            Show the rackproxy version and exit\n" \
 "help:               Show this help text and exit\n" \
-"environment:        Get basic program version and Rack directory info as JSON\n" \
+"environment:        Get basic program and Rack info as JSON\n" \
 "plugins DIRECTORY:  Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
 "plugin FILE:        Get meta data about the plugin library FILE (or 'core') as JSON\n"
 
-std::string appVersion = TOSTRING(VERSION);
-std::string apiLevel = "0.6";
+PlatformInfo *platformInfo;
 FsNames *fsNames;
 
 using namespace rack;
@@ -147,17 +148,21 @@ bool loadAllPlugs() {
 	return true;
 }
 
+void printBlurb() {
+	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str());
+}
+
 int main(int argc, char* argv[]) {
-	// Get the standard Rack directories
+	platformInfo = new PlatformInfo();
 	fsNames = getFsNames();
 	
 	if(argc < 2 || argc > 3) {
-		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		printBlurb();
 		printf(USAGE);
 		return 1;
 	}
 	else if(!strcmp(argv[1], "version") && argc == 2) {
-		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		printBlurb();
 		return 0;
 	}
 	else if(!strcmp(argv[1], "environment") && argc == 2) {
@@ -172,7 +177,7 @@ int main(int argc, char* argv[]) {
 		printf("plugin file %s", argv[2]);
 	}
 	else {
-		printf(BLURB, appVersion.c_str(), apiLevel.c_str());
+		printBlurb();
 		printf(USAGE);
 		return 1;
 	}
