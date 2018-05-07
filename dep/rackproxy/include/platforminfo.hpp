@@ -1,8 +1,7 @@
 // Platform and program version specific info
 
+#include "fsnames.hpp"
 #include "util/common.hpp"
-
-#include <string>
 
 struct PlatformInfo {
 	const std::string appVersion = TOSTRING(VERSION);
@@ -19,4 +18,7 @@ struct PlatformInfo {
 #if ARCH_LIN
     const std::string os = "lin";
 #endif
+
+    // Serialize various version and platform info
+    std::string serialize(FsNames *fsNames);
 };

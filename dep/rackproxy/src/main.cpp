@@ -28,11 +28,10 @@
 "Commands:\n" \
 "version:            Show the rackproxy version and exit\n" \
 "help:               Show this help text and exit\n" \
-"environment:        Get basic program and Rack info as JSON\n" \
+"platform:           Get basic program and Rack defined info as JSON\n" \
 "plugins DIRECTORY:  Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
 "plugin FILE:        Get meta data about the plugin library FILE (or 'core') as JSON\n"
 
-PlatformInfo *platformInfo;
 FsNames *fsNames;
 
 using namespace rack;
@@ -148,36 +147,43 @@ bool loadAllPlugs() {
 	return true;
 }
 
-void printBlurb() {
+// Print version info and exit
+void printBlurb(PlatformInfo *platformInfo) {
 	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str());
 }
 
 int main(int argc, char* argv[]) {
-	platformInfo = new PlatformInfo();
+	PlatformInfo *platformInfo = new PlatformInfo();
 	fsNames = getFsNames();
-	
+
+	// Wrong number of arguments	
 	if(argc < 2 || argc > 3) {
-		printBlurb();
+		printBlurb(platformInfo);
 		printf(USAGE);
 		return 1;
 	}
+	// Print version info and exit
 	else if(!strcmp(argv[1], "version") && argc == 2) {
-		printBlurb();
+		printBlurb(platformInfo);
 		return 0;
 	}
-	else if(!strcmp(argv[1], "environment") && argc == 2) {
-		printf("environment\n");
+	// Print basic program and Rack defined info as JSON
+	else if(!strcmp(argv[1], "platform") && argc == 2) {
+		printf("%s\n", platformInfo->serialize(fsNames).c_str());
 	}
+	// Print meta data about the plugins under a directory (recursively) as JSON
 	else if(!strcmp(argv[1], "plugins") && argc == 3) {
 		tagsInit();
 		loadAllPlugs();
 		pluginDestroy();
 	}
+	// Print meta data about a plugin library (or 'core') as JSON
 	else if(!strcmp(argv[1], "plugin") && argc == 3) {
 		printf("plugin file %s", argv[2]);
 	}
+	// Unrecognized or wrong number of arguments
 	else {
-		printBlurb();
+		printBlurb(platformInfo);
 		printf(USAGE);
 		return 1;
 	}
