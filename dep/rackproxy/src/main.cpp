@@ -20,7 +20,7 @@
 	#include <dlfcn.h>
 #endif
 
-#define BLURB "rackproxy %s (Rack API level %s)\n"
+#define BLURB "rackproxy %s (API level %s, Rack version %s)\n"
 
 #define USAGE \
 "For use by a higher level program\n" \
@@ -150,7 +150,8 @@ bool loadAllPlugs() {
 
 // Print version info and exit
 void printBlurb(PlatformInfo *platformInfo) {
-	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str());
+	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str(),
+		platformInfo->rackVersion.c_str());
 }
 
 int main(int argc, char* argv[]) {
