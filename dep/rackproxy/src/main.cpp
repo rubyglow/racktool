@@ -3,6 +3,7 @@
 
 #include "fsnames.hpp"
 #include "platforminfo.hpp"
+#include "plugins.hpp"
 
 #include "plugin.hpp"
 #include "util/common.hpp"
@@ -30,7 +31,7 @@
 "help:               Show this help text and exit\n" \
 "platform:           Get basic program and Rack defined info as JSON\n" \
 "plugins DIRECTORY:  Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
-"plugin FILE:        Get meta data about the plugin library FILE (or 'core') as JSON\n"
+"plugin DIRECTORY:   Get meta data about the plugin in DIRECTORY (or 'core') as JSON\n"
 
 FsNames *fsNames;
 
@@ -174,12 +175,18 @@ int main(int argc, char* argv[]) {
 	// Print meta data about the plugins under a directory (recursively) as JSON
 	else if(!strcmp(argv[1], "plugins") && argc == 3) {
 		tagsInit();
-		loadAllPlugs();
-		pluginDestroy();
+		auto *plugins = new Plugins();
+		plugins->load(argv[2]);
+		printf("%s\n", plugins->serialize().c_str());
+		plugins->destroy();
 	}
-	// Print meta data about a plugin library (or 'core') as JSON
+	// Print meta data about a plugin as JSON
 	else if(!strcmp(argv[1], "plugin") && argc == 3) {
-		printf("plugin file %s", argv[2]);
+		tagsInit();
+		auto *plugin = new PluginWrapper();
+		plugin->load(argv[2]);
+		printf("%s\n", plugin->serialize().c_str());
+		plugin->destroy();
 	}
 	// Unrecognized or wrong number of arguments
 	else {
