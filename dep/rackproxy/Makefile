@@ -1,6 +1,7 @@
 # Build rackproxy
 
 VERSION = 0.6.0-beta.1
+RACK_VERSION = 0.6.0
 API_LEVEL = 0.6
 
 # Remember to: export RACK_DIR=/path/to/Rack (the full Rack sourcetree)
@@ -15,7 +16,7 @@ SOURCES += $(wildcard src/*.cpp)
 FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 
 # Program version and Rack API level
-FLAGS += -DVERSION=$(VERSION) -DAPI_LEVEL=$(API_LEVEL)
+FLAGS += -DVERSION=$(VERSION) -DAPI_LEVEL=$(API_LEVEL) -DRACK_VERSION=$(RACK_VERSION)
 
 # Generate dependency files alongside the object files
 FLAGS += -MMD -MP

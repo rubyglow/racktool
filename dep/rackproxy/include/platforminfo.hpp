@@ -6,6 +6,7 @@
 struct PlatformInfo {
 	const std::string appVersion = TOSTRING(VERSION);
 	const std::string apiLevel = TOSTRING(API_LEVEL);
+	const std::string rackVersion = TOSTRING(RACK_VERSION);
 
 #if ARCH_MAC
 	const std::string os = "mac";

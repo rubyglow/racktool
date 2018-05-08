@@ -9,8 +9,9 @@
 std::string PlatformInfo::serialize(FsNames *fsNames) {
 	json_t *info = json_object();
 	
-	json_object_set_new(info, "rackApiLevel", json_string(apiLevel.c_str()));
 	json_object_set_new(info, "proxyVersion", json_string(appVersion.c_str()));
+	json_object_set_new(info, "rackApiLevel", json_string(apiLevel.c_str()));
+	json_object_set_new(info, "rackVersion", json_string(rackVersion.c_str()));
 	json_object_set_new(info, "os", json_string(os.c_str()));
 	json_object_set_new(info, "stdRackDir", json_string(fsNames->stdRackDir.c_str()));
 	json_object_set_new(info, "stdPluginDir", json_string(fsNames->stdPluginDir.c_str()));
