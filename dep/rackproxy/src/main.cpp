@@ -172,7 +172,7 @@ int main(int argc, char* argv[]) {
 	else if(!strcmp(argv[1], "platform") && argc == 2) {
 		printf("%s\n", platformInfo->serialize(fsNames).c_str());
 	}
-	// Print meta data about the plugins under a directory (recursively) as JSON
+	// Print meta data about the plugins under a directory (recursively), including the Core plugin, as JSON.
 	else if(!strcmp(argv[1], "plugins") && argc == 3) {
 		tagsInit();
 		auto *plugins = new Plugins();

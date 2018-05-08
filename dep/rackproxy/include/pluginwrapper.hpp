@@ -8,10 +8,7 @@ using namespace rack;
 
 // Wrapper for one Rack plugin
 struct PluginWrapper {
-	Plugin *plugin;
-	std::string pluginDir;
-	std::string pluginFile;
-	std::string loadError;
+	public:
 	
 	// Load the plugin in the directory
 	bool load(std::string directory);
@@ -21,4 +18,14 @@ struct PluginWrapper {
 
 	// Free resources
 	void destroy();
+
+	private:
+
+	Plugin *plugin;
+	std::string pluginDir;
+	std::string pluginFile;
+	std::string loadError;
+
+	// Load the builtin Core plugin	
+	bool loadCore();
 };

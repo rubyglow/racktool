@@ -15,6 +15,8 @@ std::string stdLibName = getFsNames()->stdLibName;
 	
 // Load the plugin in the directory
 bool PluginWrapper::load(std::string directory) {
+	if(directory == "core") return loadCore();
+
 	pluginDir = directory;
 	pluginFile = pluginDir + "/" + stdLibName;
 	printf("Loading plugin %s\n", pluginFile.c_str());
@@ -70,6 +72,18 @@ bool PluginWrapper::load(std::string directory) {
 		// Fix memory leak with `plugin` here
 		return false;
 	}
+
+	// Add plugin to list
+	gPlugins.push_back(plugin);
+
+	return true;
+}
+
+// Load the builtin Core plugin
+bool PluginWrapper::loadCore() {
+	printf("Loading Core plugin\n");
+	plugin = new Plugin();
+	init(plugin);
 
 	// Add plugin to list
 	gPlugins.push_back(plugin);

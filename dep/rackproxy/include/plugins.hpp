@@ -7,10 +7,7 @@
 
 // Wrapper for a collection of Rack plugins
 struct Plugins {
-	std::list<PluginWrapper*> pluginList;
-	std::string baseDir;
-	int numLoaded = 0;
-	int numErrors = 0;
+	public:
 	
 	// Load all plugins under directory (recursively, like Rack does)
 	void load(std::string directory);
@@ -20,4 +17,14 @@ struct Plugins {
 
 	// Free resources
 	void destroy();
+
+	private:
+
+	std::list<PluginWrapper*> pluginList;
+	std::string baseDir;
+	int numLoaded = 0;
+	int numErrors = 0;
+
+	// Load one plugin	
+	void loadPlugin(std::string directory);
 };
