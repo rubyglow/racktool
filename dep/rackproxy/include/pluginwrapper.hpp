@@ -3,6 +3,7 @@
 #include "plugin.hpp"
 
 #include <string>
+#include <jansson.h>
 
 using namespace rack;
 
@@ -10,11 +11,17 @@ using namespace rack;
 struct PluginWrapper {
 	public:
 	
+	// JSON object serialization of plugin
+	json_t *pluginJson;
+	
 	// Load the plugin in the directory
 	bool load(std::string directory);
 
-	// Serialize the loaded plugin
+	// Serialize the loaded plugin to a JSON string
 	std::string serialize();
+	
+	// Create and store the object serialization
+	void createSerialization();
 
 	// Free resources
 	void destroy();
@@ -25,6 +32,7 @@ struct PluginWrapper {
 	std::string pluginDir;
 	std::string pluginFile;
 	std::string loadError;
+	bool serialized = false;
 
 	// Load the builtin Core plugin	
 	bool loadCore();

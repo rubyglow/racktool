@@ -1,14 +1,14 @@
 // Load and serialize one or more plugins
 
 #include "plugins.hpp"
-
 #include "util/common.hpp"
+
+#include <jansson.h>
 	
 // Load all plugins under directory (recursively in one level, like Rack does)
 // Also load the builtin Core plugin
 void Plugins::load(std::string directory) {
 	baseDir = directory;
-	printf("Loading plugins under %s\n", baseDir.c_str());
 
 	// Load Core plugin
 	loadPlugin("core");
@@ -20,8 +20,6 @@ void Plugins::load(std::string directory) {
 		}
 	}
 
-	printf("Loaded %d plugins\n", numLoaded);
-	printf("%d plugins could not be loaded\n", numErrors);
 	return;
 }
 
@@ -34,9 +32,25 @@ void Plugins::loadPlugin(std::string pluginDir) {
 	if(loadSuccess) numLoaded += 1; else numErrors += 1;
 }
 
-// Serialize all loaded plugins
+// Serialize all loaded plugins and return as string
 std::string Plugins::serialize() {
-	return "json here";
+	json_t *allJson = json_object();
+	json_t *pluginsJson = json_array();
+
+	// Top metadata	
+	json_object_set_new(allJson, "baseDir", json_string(baseDir.c_str()));
+	json_object_set_new(allJson, "numLoaded", json_integer(numLoaded));
+	json_object_set_new(allJson, "numErrors", json_integer(numErrors));
+
+	// Serialize all plugins
+	for(PluginWrapper *plugin : pluginList) {
+		plugin->createSerialization();
+		json_array_append(pluginsJson, plugin->pluginJson);
+	}
+	
+	json_object_set_new(allJson, "plugins", pluginsJson);
+	
+	return json_dumps(allJson, 0);
 }
 
 // Unload all plugins and free resources. Only call once!

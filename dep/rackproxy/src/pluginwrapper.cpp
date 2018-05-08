@@ -19,7 +19,6 @@ bool PluginWrapper::load(std::string directory) {
 
 	pluginDir = directory;
 	pluginFile = pluginDir + "/" + stdLibName;
-	printf("Loading plugin %s\n", pluginFile.c_str());
 
 	// Check file existence
 	if (!systemIsFile(pluginFile)) {
@@ -81,7 +80,6 @@ bool PluginWrapper::load(std::string directory) {
 
 // Load the builtin Core plugin
 bool PluginWrapper::loadCore() {
-	printf("Loading Core plugin\n");
 	plugin = new Plugin();
 	init(plugin);
 
@@ -91,9 +89,22 @@ bool PluginWrapper::loadCore() {
 	return true;
 }
 
-// Serialize the loaded plugin
+// Serialize the loaded plugin and return as string
 std::string PluginWrapper::serialize() {
-	return "json here";
+	if(!serialized) createSerialization();
+	return json_dumps(pluginJson, 0);
+}
+
+// Create and store the object serialization
+void PluginWrapper::createSerialization() {
+	pluginJson = json_object();
+	
+	json_object_set_new(pluginJson, "dir", json_string(pluginDir.c_str()));
+	json_object_set_new(pluginJson, "file", json_string(pluginFile.c_str()));
+	json_object_set_new(pluginJson, "slug", json_string(plugin->slug.c_str()));
+	json_object_set_new(pluginJson, "version", json_string(plugin->version.c_str()));
+	
+	serialized = true;
 }
 
 // Unload plugin and free resources. Only call once!
