@@ -4,6 +4,7 @@
 #include "fsnames.hpp"
 #include "platforminfo.hpp"
 #include "plugins.hpp"
+#include "moduletags.hpp"
 
 #define BLURB "rackproxy %s (API level %s, Rack version %s)\n"
 
@@ -16,6 +17,7 @@
 "version              Show the rackproxy version and exit\n" \
 "help                 Show this help text and exit\n" \
 "platform             Get basic program and Rack defined info as JSON\n" \
+"tags                 Get the Rack defined module tags as JSON\n" \
 "plugins DIRECTORY    Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
 "plugin DIRECTORY     Get meta data about the plugin in DIRECTORY (or 'core') as JSON\n"
 
@@ -45,6 +47,13 @@ int main(int argc, char* argv[]) {
 	// Print basic program and Rack defined info as JSON
 	else if(!strcmp(argv[1], "platform") && argc == 2) {
 		printf("%s\n", platformInfo->serialize(fsNames).c_str());
+	}
+
+	// Print Rack defined module tags as JSON
+	else if(!strcmp(argv[1], "tags") && argc == 2) {
+		tagsInit();
+		auto *moduleTags = new ModuleTags();
+		printf("%s\n", moduleTags->serialize().c_str());
 	}
 
 	// Print meta data about the plugins under a directory (recursively), including the Core plugin, as JSON.
