@@ -33,6 +33,7 @@ struct PluginWrapper {
 	std::string pluginFile;
 	std::string loadError;
 	bool serialized = false;
+	bool loaded = false;
 
 	// Load the builtin Core plugin	
 	bool loadCore();

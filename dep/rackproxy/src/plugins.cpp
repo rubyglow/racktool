@@ -25,10 +25,9 @@ void Plugins::load(std::string directory) {
 
 // Load one plugin
 void Plugins::loadPlugin(std::string pluginDir) {
-	bool loadSuccess;
 	auto *plugin = new PluginWrapper();
 	pluginList.push_back(plugin);
-	loadSuccess = plugin->load(pluginDir);
+	auto loadSuccess = plugin->load(pluginDir);
 	if(loadSuccess) numLoaded += 1; else numErrors += 1;
 }
 
