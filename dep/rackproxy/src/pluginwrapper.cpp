@@ -43,7 +43,7 @@ bool PluginWrapper::load(std::string directory) {
 	}
 #endif
 	
-	// Call plugin's init() function
+	// Get handle for the plugin's init() function
 	typedef void (*InitCallback)(Plugin *);
 	InitCallback initCallback;
 #if ARCH_WIN
