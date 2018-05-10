@@ -41,3 +41,9 @@ struct FsNames {
 	// Get static instance of FsNames. Use this instead of new FsNames().
 	static FsNames* get();
 };
+
+#if ARCH_WIN
+	#define PATHSEP '\\'
+#else
+	#define PATHSEP '/'
+#endif

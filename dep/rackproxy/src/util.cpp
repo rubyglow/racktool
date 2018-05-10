@@ -1,6 +1,7 @@
 // Common utilities
 
 #include "util.hpp"
+#include "platforminfo.hpp"
 
 #include <sys/stat.h>
 #include <dirent.h>
@@ -28,7 +29,7 @@ std::vector<std::string> systemListEntries(std::string path) {
 			std::string filename = d->d_name;
 			if (filename == "." || filename == "..")
 				continue;
-			filenames.push_back(path + "/" + filename);
+			filenames.push_back(path + PATHSEP + filename);
 		}
 		closedir(dir);
 	}
