@@ -7,11 +7,14 @@
 	
 // Load all plugins under directory (recursively in one level, like Rack does)
 // Also load the builtin Core plugin
-void Plugins::load(std::string directory) {
+bool Plugins::load(std::string directory) {
 	baseDir = directory;
 
-	// Load Core plugin
-	loadPlugin("core");
+	// Don't do anything in a non-existent directory
+	// U think I'm stoooopid? :-)
+	if (!systemIsDirectory(baseDir)) {
+		return false;
+	}
 
 	// Load plugins recursively
 	for (std::string pluginDir : systemListEntries(baseDir)) {
@@ -20,7 +23,16 @@ void Plugins::load(std::string directory) {
 		}
 	}
 
-	return;
+	// There are no plugins in this directory structure, so don't even load Core.
+	// They don't deserve you, the bastards!
+	if(numLoaded == 0 && numErrors == 0) {
+		return false;
+	}
+
+	// Load Core plugin
+	loadPlugin("core");
+
+	return true;
 }
 
 // Load one plugin

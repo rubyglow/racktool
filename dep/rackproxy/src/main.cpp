@@ -60,8 +60,8 @@ int main(int argc, char* argv[]) {
 	else if(!strcmp(argv[1], "plugins") && argc == 3) {
 		tagsInit();
 		auto *plugins = new Plugins();
-		plugins->load(argv[2]);
-		printf("%s\n", plugins->serialize().c_str());
+		auto loadSuccess = plugins->load(argv[2]);
+		if(loadSuccess) printf("%s\n", plugins->serialize().c_str());
 		plugins->destroy();
 	}
 

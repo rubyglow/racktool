@@ -10,7 +10,7 @@ struct Plugins {
 	public:
 	
 	// Load all plugins under directory (recursively, like Rack does)
-	void load(std::string directory);
+	bool load(std::string directory);
 	
 	// Serialize all loaded plugins to a JSON string
 	std::string serialize();
