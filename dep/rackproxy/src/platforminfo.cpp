@@ -57,7 +57,7 @@ static void initFsNames() {
 #if ARCH_WIN
 	// Get "My Documents" folder
 	char buf[MAX_PATH];
-	HRESULT result = SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, buf);
+	SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, buf);
 	docsDir = buf;
 	fsNames->stdRackDir = docsDir + PATHSEP + "Rack";
 	fsNames->stdPluginDir = fsNames->stdRackDir + PATHSEP + "plugins";

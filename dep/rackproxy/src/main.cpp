@@ -5,6 +5,8 @@
 #include "plugins.hpp"
 #include "moduletags.hpp"
 
+#include <string.h>
+
 #define BLURB "rackproxy %s (API level %s, Rack version %s)\n"
 
 #define USAGE \

@@ -5,6 +5,7 @@
 #include "util.hpp"
 
 #if ARCH_WIN
+	#include <windows.h>
 	#include <direct.h>
 #else
 	#include <dlfcn.h>
@@ -32,7 +33,7 @@ bool PluginWrapper::load(std::string directory) {
 	SetErrorMode(0);
 	if (!handle) {
 		int error = GetLastError();
-		loadError = "Failed to load library " + pluginFile + " (code " + error + ")";
+		loadError = "Failed to load library " + pluginFile + " (code " + std::to_string(error) + ")";
 		return false;
 	}
 #else
