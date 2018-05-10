@@ -2,8 +2,7 @@
 
 #include "pluginwrapper.hpp"
 #include "platforminfo.hpp"
-
-#include "util/common.hpp"
+#include "util.hpp"
 
 #if ARCH_WIN
 	#include <direct.h>

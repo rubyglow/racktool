@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "util/common.hpp"
+#include "util.hpp"
 #include <string>
 
 struct PlatformInfo {

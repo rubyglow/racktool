@@ -1,7 +1,7 @@
 // Load and serialize one or more plugins
 
 #include "plugins.hpp"
-#include "util/common.hpp"
+#include "util.hpp"
 
 #include <jansson.h>
 	
