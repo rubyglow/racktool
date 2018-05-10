@@ -38,7 +38,6 @@ int main(int argc, char* argv[]) {
 	// Print version info and exit
 	else if(!strcmp(argv[1], "version") && argc == 2) {
 		printBlurb();
-		return 0;
 	}
 
 	// Print basic program and Rack defined info as JSON
