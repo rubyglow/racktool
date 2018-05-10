@@ -28,7 +28,10 @@ void Plugins::loadPlugin(std::string pluginDir) {
 	auto *plugin = new PluginWrapper();
 	pluginList.push_back(plugin);
 	auto loadSuccess = plugin->load(pluginDir);
-	if(loadSuccess) numLoaded += 1; else numErrors += 1;
+
+	if(plugin->include) {
+		if(loadSuccess) numLoaded += 1; else numErrors += 1;
+	}
 }
 
 // Serialize all loaded plugins and return as string
@@ -43,8 +46,10 @@ std::string Plugins::serialize() {
 
 	// Serialize all plugins
 	for(PluginWrapper *plugin : pluginList) {
-		plugin->createSerialization();
-		json_array_append(pluginsJson, plugin->pluginJson);
+		if(plugin->include) {
+			plugin->createSerialization();
+			json_array_append(pluginsJson, plugin->pluginJson);
+		}
 	}
 	
 	json_object_set_new(allJson, "plugins", pluginsJson);

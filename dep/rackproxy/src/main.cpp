@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 		tagsInit();
 		auto *plugin = new PluginWrapper();
 		plugin->load(argv[2]);
-		printf("%s\n", plugin->serialize().c_str());
+		if(plugin->include) printf("%s\n", plugin->serialize().c_str());
 		plugin->destroy();
 	}
 

@@ -10,6 +10,9 @@ using namespace rack;
 // Wrapper for one Rack plugin
 struct PluginWrapper {
 	public:
+
+	// Include this attempted plugin load in serialization?
+	bool include = true;
 	
 	// JSON object serialization of plugin
 	json_t *pluginJson;

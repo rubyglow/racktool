@@ -20,8 +20,9 @@ bool PluginWrapper::load(std::string directory) {
 	pluginDir = directory;
 	pluginFile = pluginDir + "/" + stdLibName;
 
-	// Directory does not contain a plugin file. Just ignore.
+	// Directory does not contain a plugin file
 	if (!systemIsFile(pluginFile)) {
+		include = false; // Don't serialize, just forget it.
 		return false;
 	}
 
