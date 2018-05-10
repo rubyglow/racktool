@@ -6,7 +6,7 @@
 #include <jansson.h>
 
 // Serialize various version and platform info
-std::string PlatformInfo::serialize(FsNames *fsNames) {
+char* PlatformInfo::serialize(FsNames *fsNames) {
 	json_t *info = json_object();
 	
 	json_object_set_new(info, "proxyVersion", json_string(appVersion.c_str()));

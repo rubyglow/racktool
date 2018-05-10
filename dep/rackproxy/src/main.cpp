@@ -46,14 +46,18 @@ int main(int argc, char* argv[]) {
 
 	// Print basic program and Rack defined info as JSON
 	else if(!strcmp(argv[1], "platform") && argc == 2) {
-		printf("%s\n", platformInfo->serialize(fsNames).c_str());
+		char *jsonStr = platformInfo->serialize(fsNames); 
+		printf("%s\n", jsonStr);
+		free(jsonStr);
 	}
 
 	// Print Rack defined module tags as JSON
 	else if(!strcmp(argv[1], "tags") && argc == 2) {
 		tagsInit();
 		auto *moduleTags = new ModuleTags();
-		printf("%s\n", moduleTags->serialize().c_str());
+		char *jsonStr = moduleTags->serialize();
+		printf("%s\n", jsonStr);
+		free(jsonStr);
 	}
 
 	// Print meta data about the plugins under a directory (recursively), including the Core plugin, as JSON.
@@ -61,7 +65,12 @@ int main(int argc, char* argv[]) {
 		tagsInit();
 		auto *plugins = new Plugins();
 		auto loadSuccess = plugins->load(argv[2]);
-		if(loadSuccess) printf("%s\n", plugins->serialize().c_str());
+		if(loadSuccess) {
+			char *jsonStr = plugins->serialize(); 
+			printf("%s\n", jsonStr);
+			free(jsonStr);
+		}
+
 		plugins->destroy();
 	}
 
@@ -70,7 +79,12 @@ int main(int argc, char* argv[]) {
 		tagsInit();
 		auto *plugin = new PluginWrapper();
 		plugin->load(argv[2]);
-		if(plugin->include) printf("%s\n", plugin->serialize().c_str());
+		if(plugin->include) {
+			char *jsonStr = plugin->serialize();
+			printf("%s\n", jsonStr);
+			free(jsonStr);
+		}
+
 		plugin->destroy();
 	}
 

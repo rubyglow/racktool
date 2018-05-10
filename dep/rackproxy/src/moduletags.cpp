@@ -8,7 +8,7 @@
 using namespace rack;
 
 // Serialize all the module tags as a JSON string
-std::string ModuleTags::serialize() {
+char* ModuleTags::serialize() {
 	json_t *tagsJson = json_array();
 	
 	for (std::string tag : gTagNames) {

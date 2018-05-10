@@ -4,5 +4,5 @@
 
 struct ModuleTags {
 	// Serialize all the tags as a JSON string
-	std::string serialize();
+	char* serialize();
 };

@@ -47,7 +47,7 @@ void Plugins::loadPlugin(std::string pluginDir) {
 }
 
 // Serialize all loaded plugins and return as string
-std::string Plugins::serialize() {
+char* Plugins::serialize() {
 	json_t *allJson = json_object();
 	json_t *pluginsJson = json_array();
 

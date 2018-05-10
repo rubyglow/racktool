@@ -21,5 +21,5 @@ struct PlatformInfo {
 #endif
 
 	// Serialize various version and platform info
-	std::string serialize(FsNames *fsNames);
+	char* serialize(FsNames *fsNames);
 };

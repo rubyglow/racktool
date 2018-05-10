@@ -93,7 +93,7 @@ bool PluginWrapper::loadCore() {
 }
 
 // Serialize the loaded plugin and return as string
-std::string PluginWrapper::serialize() {
+char* PluginWrapper::serialize() {
 	if(!serialized) createSerialization();
 	return json_dumps(pluginJson, 0);
 }

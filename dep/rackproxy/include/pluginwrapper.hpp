@@ -21,7 +21,7 @@ struct PluginWrapper {
 	bool load(std::string directory);
 
 	// Serialize the loaded plugin to a JSON string
-	std::string serialize();
+	char* serialize();
 	
 	// Create and store the object serialization
 	void createSerialization();

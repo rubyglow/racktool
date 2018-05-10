@@ -13,7 +13,7 @@ struct Plugins {
 	bool load(std::string directory);
 	
 	// Serialize all loaded plugins to a JSON string
-	std::string serialize();
+	char* serialize();
 
 	// Free resources
 	void destroy();
