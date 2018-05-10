@@ -1,7 +1,7 @@
 // Load and serialize one plugin
 
 #include "pluginwrapper.hpp"
-#include "fsnames.hpp"
+#include "platforminfo.hpp"
 
 #include "util/common.hpp"
 
@@ -10,13 +10,12 @@
 #else
 	#include <dlfcn.h>
 #endif
-
-std::string stdLibName = getFsNames()->stdLibName;
 	
+std::string stdLibName = FsNames::get()->stdLibName;
+
 // Load the plugin in the directory
 bool PluginWrapper::load(std::string directory) {
 	if(directory == "core") return loadCore();
-
 	pluginDir = directory;
 	pluginFile = pluginDir + "/" + stdLibName;
 

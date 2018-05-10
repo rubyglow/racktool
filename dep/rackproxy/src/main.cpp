@@ -1,7 +1,6 @@
 // rackproxy - low level serialization of Rack and plugin metadata
 // For use by a higher-level program
 
-#include "fsnames.hpp"
 #include "platforminfo.hpp"
 #include "plugins.hpp"
 #include "moduletags.hpp"
@@ -21,32 +20,30 @@
 "plugins DIRECTORY    Get meta data about the plugins under DIRECTORY (recursively) as JSON\n" \
 "plugin DIRECTORY     Get meta data about the plugin in DIRECTORY (or 'core') as JSON\n"
 
-// Print version info and exit
-void printBlurb(PlatformInfo *platformInfo) {
+// Print version info
+void printBlurb() {
+	auto *platformInfo = new PlatformInfo();
 	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str(),
 		platformInfo->rackVersion.c_str());
 }
 
 int main(int argc, char* argv[]) {
-	PlatformInfo *platformInfo = new PlatformInfo();
-	FsNames *fsNames = getFsNames();
-
 	// Wrong number of arguments	
 	if(argc < 2 || argc > 3) {
-		printBlurb(platformInfo);
+		printBlurb();
 		printf(USAGE);
 		return 1;
 	}
 
 	// Print version info and exit
 	else if(!strcmp(argv[1], "version") && argc == 2) {
-		printBlurb(platformInfo);
+		printBlurb();
 		return 0;
 	}
 
 	// Print basic program and Rack defined info as JSON
 	else if(!strcmp(argv[1], "platform") && argc == 2) {
-		char *jsonStr = platformInfo->serialize(fsNames); 
+		char *jsonStr = (new PlatformInfo())->serialize(); 
 		printf("%s\n", jsonStr);
 		free(jsonStr);
 	}
@@ -90,7 +87,7 @@ int main(int argc, char* argv[]) {
 
 	// Unrecognized or wrong number of arguments
 	else {
-		printBlurb(platformInfo);
+		printBlurb();
 		printf(USAGE);
 		return 1;
 	}
