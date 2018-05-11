@@ -30,16 +30,17 @@ bool PluginWrapper::load(std::string directory) {
 #if ARCH_WIN
 	SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 	HINSTANCE handle = LoadLibrary(pluginFile.c_str());
+	int error = GetLastError();
 	SetErrorMode(0);
 	if (!handle) {
-		int error = GetLastError();
-		loadError = "Failed to load library " + pluginFile + " (error code " + std::to_string(error) + ")";
+		loadError = "Failed to load plugin " + pluginFile +
+			": [" + std::to_string(error) + "] " + GetLastErrorMsg(error);
 		return false;
 	}
 #else
 	void *handle = dlopen(pluginFile.c_str(), RTLD_NOW);
 	if (!handle) {
-		loadError = "Failed to load library " + pluginFile + " : " + dlerror();
+		loadError = "Failed to load plugin " + pluginFile + ": " + dlerror();
 		return false;
 	}
 #endif

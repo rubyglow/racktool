@@ -19,3 +19,7 @@ and of course the C++ lexer/parser then concatenates the string literals.
 bool systemIsFile(std::string path);
 bool systemIsDirectory(std::string path);
 std::vector<std::string> systemListEntries(std::string path);
+
+#if ARCH_WIN
+	std::string GetLastErrorMsg(int errCode);
+#endif

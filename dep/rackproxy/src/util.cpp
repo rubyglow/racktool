@@ -6,6 +6,11 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+#if ARCH_WIN
+#include <Windows.h>
+#include <strsafe.h>
+#endif
+
 bool systemIsFile(std::string path) {
 	struct stat statbuf;
 	if (stat(path.c_str(), &statbuf))
@@ -35,3 +40,29 @@ std::vector<std::string> systemListEntries(std::string path) {
 	}
 	return filenames;
 }
+
+#if ARCH_WIN
+// Get the last system error message from Windows.
+// Because this is supposed to be very complicated, yikes!
+std::string GetLastErrorMsg(int errCode) {
+	std::string retval;
+	LPVOID lpMsgBuf;
+	DWORD dw = errCode;
+
+	FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS |
+		FORMAT_MESSAGE_MAX_WIDTH_MASK,
+		NULL,
+		dw,
+		MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+		(LPTSTR) &lpMsgBuf,
+		0, NULL );
+
+	retval = std::string((LPTSTR) lpMsgBuf);
+	LocalFree(lpMsgBuf);
+	
+	return retval;
+}
+#endif
