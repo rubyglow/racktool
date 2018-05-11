@@ -65,7 +65,7 @@ endif
 ifeq ($(ARCH), win)
 	TARGET := rackproxy.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
-	LDFLAGS += -lws2_32 \
+	LDFLAGS += -lpthread -lws2_32 \
 		-lopengl32 -lcomdlg32 \
 		-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
 		-ljansson -lspeexdsp
