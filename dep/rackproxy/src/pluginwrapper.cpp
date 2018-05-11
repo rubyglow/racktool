@@ -35,6 +35,7 @@ bool PluginWrapper::load(std::string directory) {
 	if (!handle) {
 		loadError = "Failed to load plugin " + pluginFile +
 			": [" + std::to_string(error) + "] " + GetLastErrorMsg(error);
+		
 		return false;
 	}
 #else
