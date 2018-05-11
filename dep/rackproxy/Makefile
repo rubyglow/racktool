@@ -65,22 +65,10 @@ endif
 ifeq ($(ARCH), win)
 	TARGET := rackproxy.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
-
-	# LDFLAGS += -L$(RACK_DIR) -lRack \
-	# 	-static-libgcc -static-libstdc++ -lpthread -lws2_32 \
-	# 	-Wl,--export-all-symbols,--out-implib,libRack.a -mwindows \
-	# 	-lgdi32 -lopengl32 -lcomdlg32 -lole32 \
-	# 	-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
-	# 	-Wl,-Bstatic -ljansson -lspeexdsp
-
-	# LDFLAGS += -L$(RACK_DIR) -lRack \
-	# 	-lpthread -lws2_32 \
-	# 	-mwindows \
-	# 	-lgdi32 -lopengl32 -lcomdlg32 -lole32 \
-	# 	-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
-	# 	-Wl,-Bstatic -ljansson -lspeexdsp
-
-	LDFLAGS += -L$(RACK_DIR) -lRack
+	LDFLAGS += -lws2_32 \
+		-lopengl32 -lcomdlg32 \
+		-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
+		-ljansson -lspeexdsp
 endif
 
 # Link against dependencies built by Rack
@@ -106,12 +94,10 @@ CXXFLAGS += -std=c++11 $(FLAGS)
 SOURCE_OBJECTS := $(patsubst %, build/%.o, $(SOURCES))
 #DEPENDENCIES := $(patsubst %, build/%.d, $(SOURCES))
 
-ifneq ($(ARCH), win)
-	# Link in all Rack object files, except for main.cpp.o
-	# TODO: Trim to list of actually needed objects (unfortunately probably most)
-	RACK_OBJECTS = $(filter-out $(RACK_DIR)/build/src/main.cpp.o, $(wildcard $(RACK_DIR)/build/src/*.o $(RACK_DIR)/build/src/*/*.o))
-	RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/build/dep/osdialog/*.o)
-endif
+# Link in all Rack object files, except for main.cpp.o
+# TODO: Trim to list of actually needed objects (unfortunately probably most)
+RACK_OBJECTS = $(filter-out $(RACK_DIR)/build/src/main.cpp.o, $(wildcard $(RACK_DIR)/build/src/*.o $(RACK_DIR)/build/src/*/*.o))
+RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/build/dep/osdialog/*.o)
 
 # Final targets
 $(TARGET): $(SOURCE_OBJECTS) $(RACK_OBJECTS)

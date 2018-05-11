@@ -1,4 +1,5 @@
 .DS_Store
 dep/rackproxy/build
 dep/rackproxy/rackproxy
+dep/rackproxy/rackproxy.exe
 dep/rackproxy/rackproxy.env

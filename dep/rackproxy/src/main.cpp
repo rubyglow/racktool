@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#define BLURB "rackproxy %s (API level %s, Rack version %s)\n"
+#define BLURB "rackproxy %s (API level %s, Rack version %s, OS: %s)\n"
 
 #define USAGE \
 "For use by a higher level program\n" \
@@ -26,7 +26,7 @@
 void printBlurb() {
 	auto *platformInfo = new PlatformInfo();
 	printf(BLURB, platformInfo->appVersion.c_str(), platformInfo->apiLevel.c_str(),
-		platformInfo->rackVersion.c_str());
+		platformInfo->rackVersion.c_str(), platformInfo->os.c_str());
 }
 
 int main(int argc, char* argv[]) {

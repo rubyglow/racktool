@@ -33,7 +33,7 @@ bool PluginWrapper::load(std::string directory) {
 	SetErrorMode(0);
 	if (!handle) {
 		int error = GetLastError();
-		loadError = "Failed to load library " + pluginFile + " (code " + std::to_string(error) + ")";
+		loadError = "Failed to load library " + pluginFile + " (error code " + std::to_string(error) + ")";
 		return false;
 	}
 #else
