@@ -47,6 +47,7 @@ ifeq ($(ARCH), lin)
 	TARGET := rackproxy.lin
 	FLAGS += -DARCH_LIN
 	LDFLAGS += -rdynamic \
+		-lpthread -lGL -ldl \
 		$(shell pkg-config --libs gtk+-2.0) \
 		-lGLEW -lglfw -ljansson -lspeexdsp -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl
 endif
@@ -65,7 +66,6 @@ endif
 ifeq ($(ARCH), win)
 	TARGET := rackproxy.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
-
 	LDFLAGS += -static-libgcc -static-libstdc++ -lpthread -lws2_32 \
 		-lgdi32 -lopengl32 -lcomdlg32 -lole32 \
 		-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
