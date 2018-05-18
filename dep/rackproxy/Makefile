@@ -19,8 +19,8 @@ FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 FLAGS += -DVERSION=$(VERSION) -DAPI_LEVEL=$(API_LEVEL) -DRACK_VERSION=$(RACK_VERSION)
 
 # Generate dependency files alongside the object files
-# FLAGS += -MMD -MP
-# FLAGS += -g
+FLAGS += -MMD -MP
+FLAGS += -g
 
 # Optimization
 FLAGS += -O3 -march=nocona -ffast-math -fno-finite-math-only
@@ -93,7 +93,7 @@ CXXFLAGS += -std=c++11 $(FLAGS)
 
 # Derive object files from sources and place them before user-defined objects
 SOURCE_OBJECTS := $(patsubst %, build/%.o, $(SOURCES))
-#DEPENDENCIES := $(patsubst %, build/%.d, $(SOURCES))
+DEPENDENCIES := $(patsubst %, build/%.d, $(SOURCES))
 
 # Link in all Rack object files, except for main.cpp.o
 # TODO: Trim to list of actually needed objects (unfortunately probably most)
@@ -104,7 +104,7 @@ RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/buil
 $(TARGET): $(SOURCE_OBJECTS) $(RACK_OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-#-include $(DEPENDENCIES)
+-include $(DEPENDENCIES)
 
 build/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
