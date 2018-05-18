@@ -44,7 +44,7 @@ endif
 endif
 
 ifeq ($(ARCH), lin)
-	TARGET := rackproxy
+	TARGET := rackproxy.lin
 	FLAGS += -DARCH_LIN
 	LDFLAGS += -rdynamic \
 		$(shell pkg-config --libs gtk+-2.0) \
@@ -52,7 +52,7 @@ ifeq ($(ARCH), lin)
 endif
 
 ifeq ($(ARCH), mac)
-	TARGET := rackproxy
+	TARGET := rackproxy.mac
 	FLAGS += -DARCH_MAC
 	CXXFLAGS += -stdlib=libc++
 	MAC_SDK_FLAGS = -mmacosx-version-min=10.7
@@ -92,8 +92,8 @@ endif
 CXXFLAGS += -std=c++11 $(FLAGS)
 
 # Derive object files from sources and place them before user-defined objects
-SOURCE_OBJECTS := $(patsubst %, build/%.o, $(SOURCES))
-DEPENDENCIES := $(patsubst %, build/%.d, $(SOURCES))
+SOURCE_OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES))
+DEPENDENCIES := $(patsubst %, build/$(ARCH)/%.d, $(SOURCES))
 
 # Link in all Rack object files, except for main.cpp.o
 # TODO: Trim to list of actually needed objects (unfortunately probably most)
@@ -106,14 +106,14 @@ $(TARGET): $(SOURCE_OBJECTS) $(RACK_OBJECTS)
 
 -include $(DEPENDENCIES)
 
-build/%.cpp.o: %.cpp
+build/$(ARCH)/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 all: $(TARGET)
 
 clean:
-	rm -rfv build $(TARGET) dist
+	rm -rfv build/$(ARCH) $(TARGET) dist
 
 dist: all
 	rm -rf dist
