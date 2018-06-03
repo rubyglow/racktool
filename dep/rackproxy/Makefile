@@ -1,13 +1,15 @@
 # Build rackproxy
 
 VERSION = 0.6.0-beta.1
-RACK_VERSION = 0.6.0
+RACK_VERSION = 0.6.1dev
 API_LEVEL = 0.6
 
 # Remember to: export RACK_DIR=/path/to/Rack (the full Rack sourcetree)
 ifndef RACK_DIR
 $(error RACK_DIR is not defined)
 endif
+
+STRIP ?= strip
 
 # Add .cpp and .c files to the build
 SOURCES += $(wildcard src/*.cpp)
@@ -28,7 +30,7 @@ FLAGS += -Wall -Wextra -Wno-unused-parameter
 
 # Detect architecture if ARCH is not defined
 ifndef ARCH
-MACHINE = $(shell gcc -dumpmachine)
+MACHINE = $(shell $(CC) -dumpmachine)
 ifneq (,$(findstring linux,$(MACHINE)))
 	# Linux
 	ARCH = lin
@@ -43,13 +45,17 @@ else
 endif
 endif
 
+# Link against dependencies built by Rack
+LDFLAGS += -L$(RACK_DIR)/dep/lib
+
 ifeq ($(ARCH), lin)
 	TARGET := rackproxy.lin
 	FLAGS += -DARCH_LIN
+	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
 	LDFLAGS += -rdynamic \
-		-lpthread -lGL -ldl \
-		$(shell pkg-config --libs gtk+-2.0) \
-		-lGLEW -lglfw -ljansson -lspeexdsp -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl
+		-Wl,-Bstatic -lglfw3 -lGLEW -ljansson -lspeexdsp -lzip -lz -lrtmidi -lrtaudio -lcurl -lssl -lcrypto \
+		-Wl,-Bdynamic -lpthread -lGL -ldl -lX11 -lasound -ljack \
+		$(shell pkg-config --libs gtk+-2.0)
 endif
 
 ifeq ($(ARCH), mac)
@@ -58,22 +64,22 @@ ifeq ($(ARCH), mac)
 	CXXFLAGS += -stdlib=libc++
 	MAC_SDK_FLAGS = -mmacosx-version-min=10.7
 	FLAGS += $(MAC_SDK_FLAGS)
-	LDFLAGS += -stdlib=libc++ $(MAC_SDK_FLAGS) \
-		-framework Cocoa -framework OpenGL \
-		-lGLEW -lglfw -ljansson -lspeexdsp -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl
+	LDFLAGS += $(MAC_SDK_FLAGS) \
+		-stdlib=libc++ -lpthread -ldl \
+		-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework CoreAudio -framework CoreMIDI \
+		$(RACK_DIR)/dep/lib/libglfw3.a $(RACK_DIR)/dep/lib/libGLEW.a $(RACK_DIR)/dep/lib/libjansson.a \
+		$(RACK_DIR)/dep/lib/libspeexdsp.a $(RACK_DIR)/dep/lib/libzip.a $(RACK_DIR)/dep/lib/libz.a \
+		$(RACK_DIR)/dep/lib/librtaudio.a $(RACK_DIR)/dep/lib/librtmidi.a $(RACK_DIR)/dep/lib/libcrypto.a \
+		$(RACK_DIR)/dep/lib/libssl.a $(RACK_DIR)/dep/lib/libcurl.a
 endif
 
 ifeq ($(ARCH), win)
 	TARGET := rackproxy.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
-	LDFLAGS += -static-libgcc -static-libstdc++ -lpthread -lws2_32 \
-		-lgdi32 -lopengl32 -lcomdlg32 -lole32 \
-		-lglew32 -lglfw3dll -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl \
-		-Wl,-Bstatic -ljansson -lspeexdsp
+	LDFLAGS += -static \
+		-lglew32 -lglfw3 -ljansson -lspeexdsp -lzip -lz -lcurl -lssl -lcrypto -lrtaudio -lrtmidi \
+		-lpthread -lopengl32 -lgdi32 -lws2_32 -lcomdlg32 -lole32 -ldsound -lwinmm -lksuser -lshlwapi
 endif
-
-# Link against dependencies built by Rack
-LDFLAGS += -L$(RACK_DIR)/dep/lib
 
 # The install location for `make install`
 DEP_LOCAL ?= .
@@ -92,7 +98,7 @@ endif
 CXXFLAGS += -std=c++11 $(FLAGS)
 
 # Derive object files from sources and place them before user-defined objects
-SOURCE_OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES))
+OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES)) $(OBJECTS)
 DEPENDENCIES := $(patsubst %, build/$(ARCH)/%.d, $(SOURCES))
 
 # Link in all Rack object files, except for main.cpp.o
@@ -101,7 +107,7 @@ RACK_OBJECTS = $(filter-out $(RACK_DIR)/build/src/main.cpp.o, $(wildcard $(RACK_
 RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/build/dep/osdialog/*.o)
 
 # Final targets
-$(TARGET): $(SOURCE_OBJECTS) $(RACK_OBJECTS)
+$(TARGET): $(OBJECTS) $(RACK_OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 -include $(DEPENDENCIES)
@@ -114,16 +120,5 @@ all: $(TARGET)
 
 clean:
 	rm -rfv build/$(ARCH) $(TARGET) dist
-
-dist: all
-	rm -rf dist
-	mkdir -p dist
-	# Strip and copy binary
-	cp $(TARGET) dist/
-ifeq ($(ARCH), mac)
-	strip -x dist/$(TARGET)
-else
-	strip -s dist/$(TARGET)
-endif
 
 .DEFAULT_GOAL := all
