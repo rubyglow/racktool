@@ -9,6 +9,28 @@ ifndef RACK_DIR
 $(error RACK_DIR is not defined)
 endif
 
+# Detect architecture
+MACHINE = $(shell $(CC) -dumpmachine)
+ifneq (, $(findstring apple, $(MACHINE)))
+	ARCH_MAC := 1
+	ARCH := mac
+else ifneq (, $(findstring mingw, $(MACHINE)))
+	ARCH_WIN := 1
+	ARCH := win
+	ifneq ( ,$(findstring x86_64, $(MACHINE)))
+		ARCH_WIN_64 := 1
+		BITS := 64
+	else ifneq (, $(findstring i686, $(MACHINE)))
+		ARCH_WIN_32 := 1
+		BITS := 32
+	endif
+else ifneq (, $(findstring linux, $(MACHINE)))
+	ARCH_LIN := 1
+	ARCH := lin
+else
+$(error Could not determine architecture)
+endif
+
 STRIP ?= strip
 
 # Add .cpp and .c files to the build
@@ -28,37 +50,10 @@ FLAGS += -g
 FLAGS += -O3 -march=nocona -ffast-math -fno-finite-math-only
 FLAGS += -Wall -Wextra -Wno-unused-parameter
 
-# Detect architecture if ARCH is not defined
-ifndef ARCH
-MACHINE = $(shell $(CC) -dumpmachine)
-ifneq (,$(findstring linux,$(MACHINE)))
-	# Linux
-	ARCH = lin
-else ifneq (,$(findstring apple,$(MACHINE)))
-	# Mac
-	ARCH = mac
-else ifneq (,$(findstring mingw,$(MACHINE)))
-	# Windows
-	ARCH = win
-else
-	$(error Could not determine machine type)
-endif
-endif
-
 # Link against dependencies built by Rack
 LDFLAGS += -L$(RACK_DIR)/dep/lib
 
-ifeq ($(ARCH), lin)
-	TARGET := rackproxy.lin
-	FLAGS += -DARCH_LIN
-	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
-	LDFLAGS += -rdynamic \
-		-Wl,-Bstatic -lglfw3 -lGLEW -ljansson -lspeexdsp -lzip -lz -lrtmidi -lrtaudio -lcurl -lssl -lcrypto \
-		-Wl,-Bdynamic -lpthread -lGL -ldl -lX11 -lasound -ljack \
-		$(shell pkg-config --libs gtk+-2.0)
-endif
-
-ifeq ($(ARCH), mac)
+ifdef ARCH_MAC
 	TARGET := rackproxy.mac
 	FLAGS += -DARCH_MAC
 	CXXFLAGS += -stdlib=libc++
@@ -73,7 +68,7 @@ ifeq ($(ARCH), mac)
 		$(RACK_DIR)/dep/lib/libssl.a $(RACK_DIR)/dep/lib/libcurl.a
 endif
 
-ifeq ($(ARCH), win)
+ifdef ARCH_WIN
 	TARGET := rackproxy.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
 	LDFLAGS += -static \
@@ -81,11 +76,21 @@ ifeq ($(ARCH), win)
 		-lpthread -lopengl32 -lgdi32 -lws2_32 -lcomdlg32 -lole32 -ldsound -lwinmm -lksuser -lshlwapi
 endif
 
+ifdef ARCH_LIN
+	TARGET := rackproxy.lin
+	FLAGS += -DARCH_LIN
+	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
+	LDFLAGS += -rdynamic \
+		-Wl,-Bstatic -lglfw3 -lGLEW -ljansson -lspeexdsp -lzip -lz -lrtmidi -lrtaudio -lcurl -lssl -lcrypto \
+		-Wl,-Bdynamic -lpthread -lGL -ldl -lX11 -lasound -ljack \
+		$(shell pkg-config --libs gtk+-2.0)
+endif
+
 # The install location for `make install`
 DEP_LOCAL ?= .
 
 # Commands
-ifeq ($(ARCH), win)
+ifdef ARCH_WIN
 	CMAKE := cmake -G 'MSYS Makefiles' -DCMAKE_INSTALL_PREFIX="$(realpath $(DEP_LOCAL))"
 else
 	CMAKE := cmake -DCMAKE_INSTALL_PREFIX="$(realpath $(DEP_LOCAL))"
