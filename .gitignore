@@ -1,3 +1,4 @@
 .DS_Store
 dep/rackproxy/build
 dep/rackproxy/rackproxy*
+dep/rackproxy/experiments
