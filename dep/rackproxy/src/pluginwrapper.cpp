@@ -17,7 +17,7 @@ std::string stdLibName = FsNames::get()->stdLibName;
 bool PluginWrapper::load(std::string directory) {
 	if(directory == "core") return loadCore();
 	pluginDir = directory;
-	pluginFile = pluginDir + PATHSEP + stdLibName;
+	pluginFile = pluginDir + "/" + stdLibName;
 
 	// Directory does not exist or does not contain a plugin file
 	// Just ignore entirely - it never happened

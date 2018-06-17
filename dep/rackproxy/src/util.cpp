@@ -34,7 +34,7 @@ std::vector<std::string> systemListEntries(std::string path) {
 			std::string filename = d->d_name;
 			if (filename == "." || filename == "..")
 				continue;
-			filenames.push_back(path + PATHSEP + filename);
+			filenames.push_back(path + "/" + filename);
 		}
 		closedir(dir);
 	}

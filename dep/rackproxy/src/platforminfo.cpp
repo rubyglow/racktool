@@ -50,8 +50,8 @@ static void initFsNames() {
 	// Get home directory
 	struct passwd *pw = getpwuid(getuid());
 	homeDir = pw->pw_dir;
-	fsNames->stdRackDir = homeDir + PATHSEP + "Documents" + PATHSEP + "Rack";
-	fsNames->stdPluginDir = fsNames->stdRackDir + PATHSEP + "plugins";
+	fsNames->stdRackDir = homeDir + "/" + "Documents" + "/" + "Rack";
+	fsNames->stdPluginDir = fsNames->stdRackDir + "/" + "plugins";
 #endif
 
 #if ARCH_WIN
@@ -59,8 +59,8 @@ static void initFsNames() {
 	char buf[MAX_PATH];
 	SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, buf);
 	docsDir = buf;
-	fsNames->stdRackDir = docsDir + PATHSEP + "Rack";
-	fsNames->stdPluginDir = fsNames->stdRackDir + PATHSEP + "plugins";
+	fsNames->stdRackDir = docsDir + "\\" + "Rack";
+	fsNames->stdPluginDir = fsNames->stdRackDir + "\\" + "plugins";
 #endif
 
 #if ARCH_LIN
@@ -71,8 +71,8 @@ static void initFsNames() {
 		home = pw->pw_dir;
 	}
 	homeDir = home;
-	fsNames->stdRackDir = homeDir + PATHSEP + ".Rack";
-	fsNames->stdPluginDir = fsNames->stdRackDir + PATHSEP + "plugins";
+	fsNames->stdRackDir = homeDir + "/" + ".Rack";
+	fsNames->stdPluginDir = fsNames->stdRackDir + "/" + "plugins";
 #endif
 
 	isInit = true;
