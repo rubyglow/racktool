@@ -8,7 +8,7 @@ First build the VCV Rack v0.6 branch per the instructions. Verify it's working w
 
 Then set the RACK_DIR variable pointing at the Rack code, the same way you would when building a plugin.
 
-go into dep/rackproxy and run make.
+Go into dep/rackproxy and run make.
 
 ## Running
 
