@@ -4,7 +4,14 @@ A very early days, work in progress tool, for eventually doing even more useful 
 
 ## Building
 
-First build the VCV Rack v0.6 branch per the instructions. Verify it's working with make run.
+First build Rack per the instructions at https://github.com/VCVRack/Rack/blob/v0.6.1/README.md but instead of `git clone https://github.com/VCVRack/Rack.git` and `cd Rack` - do:
+
+```
+git clone -b v0.6.1 https://github.com/VCVRack/Rack.git Rack-0.6.1
+cd Rack-0.6.1
+```
+
+Verify it's working with make run.
 
 Then set the RACK_DIR variable pointing at the Rack code, the same way you would when building a plugin.
 
