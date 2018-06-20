@@ -1,10 +1,10 @@
 # Build rackproxy
 
 VERSION = 0.6.0-beta.1
-RACK_VERSION = 0.6.1dev
+RACK_VERSION = 0.6.1
 API_LEVEL = 0.6
 
-# Remember to: export RACK_DIR=/path/to/Rack (the full Rack sourcetree)
+# Remember to: export RACK_DIR=/path/to/Rack-0.6.1 (the full Rack 0.6.1 sourcetree at tag v.0.6.1)
 ifndef RACK_DIR
 $(error RACK_DIR is not defined)
 endif
@@ -28,30 +28,11 @@ else ifneq (, $(findstring linux, $(MACHINE)))
 	ARCH_LIN := 1
 	ARCH := lin
 else
-$(error Could not determine architecture)
+$(error Could not determine architecture of $(MACHINE))
 endif
-
-STRIP ?= strip
 
 # Add .cpp and .c files to the build
 SOURCES += $(wildcard src/*.cpp)
-
-# Include local + Rack includes
-FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
-
-# Program version and Rack API level
-FLAGS += -DVERSION=$(VERSION) -DAPI_LEVEL=$(API_LEVEL) -DRACK_VERSION=$(RACK_VERSION)
-
-# Generate dependency files alongside the object files
-FLAGS += -MMD -MP
-FLAGS += -g
-
-# Optimization
-FLAGS += -O3 -march=nocona -ffast-math -fno-finite-math-only
-FLAGS += -Wall -Wextra -Wno-unused-parameter
-
-# Link against dependencies built by Rack
-LDFLAGS += -L$(RACK_DIR)/dep/lib
 
 ifdef ARCH_MAC
 	TARGET := rackproxy.mac
@@ -86,15 +67,22 @@ ifdef ARCH_LIN
 		$(shell pkg-config --libs gtk+-2.0)
 endif
 
-# The install location for `make install`
-DEP_LOCAL ?= .
+# Include local + Rack includes
+FLAGS += -Iinclude -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 
-# Commands
-ifdef ARCH_WIN
-	CMAKE := cmake -G 'MSYS Makefiles' -DCMAKE_INSTALL_PREFIX="$(realpath $(DEP_LOCAL))"
-else
-	CMAKE := cmake -DCMAKE_INSTALL_PREFIX="$(realpath $(DEP_LOCAL))"
-endif
+# Program version and Rack API level
+FLAGS += -DVERSION=$(VERSION) -DAPI_LEVEL=$(API_LEVEL) -DRACK_VERSION=$(RACK_VERSION)
+
+# Generate dependency files alongside the object files
+FLAGS += -MMD -MP
+FLAGS += -g
+
+# Optimization
+FLAGS += -O3 -march=nocona -ffast-math -fno-finite-math-only
+FLAGS += -Wall -Wextra -Wno-unused-parameter
+
+# Link against dependencies built by Rack
+LDFLAGS += -L$(RACK_DIR)/dep/lib
 
 ifneq ($(ARCH), mac)
 	CXXFLAGS += -Wsuggest-override
@@ -103,7 +91,7 @@ endif
 CXXFLAGS += -std=c++11 $(FLAGS)
 
 # Derive object files from sources and place them before user-defined objects
-OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES)) $(OBJECTS)
+OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES))
 DEPENDENCIES := $(patsubst %, build/$(ARCH)/%.d, $(SOURCES))
 
 # Link in all Rack object files, except for main.cpp.o
