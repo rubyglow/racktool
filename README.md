@@ -19,6 +19,9 @@ Go into `dep/rackproxy` and run `make`.
 
 ## Running
 
+On Windows (only) you first need to - either copy libwinpthread-1.dll, libstdc++-6.dll and libgcc_s_seh-1.dll, from your mingw64\bin\ directory of MSYS2 (I have it at c:\msys2\mingw64\bin) to the rackproxy directory, or set your PATH to include the mingw64\bin\ directory, e.g:
+`set PATH=c:\msys2\mingw64\bin;%PATH%`
+
 Run `./rackproxy.{exe|lin|mac}` to see help.
 
 Try running e.g. `./rackproxy.mac plugin $HOME/Documents/Rack/plugins/AS` (on a Mac) to see it in action, or e.g. `./rackproxy.mac plugins $HOME/Documents/Rack/plugins`.
