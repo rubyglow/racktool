@@ -11,19 +11,19 @@ git clone -b v0.6.1 https://github.com/VCVRack/Rack.git Rack-0.6.1
 cd Rack-0.6.1
 ```
 
-Verify it's working with make run.
+Verify it's working with `make run`.
 
-Then set the RACK_DIR variable pointing at the Rack code, the same way you would when building a plugin.
+Then set the `RACK_DIR` variable pointing at the Rack code, the same way you would when building a plugin.
 
-Go into dep/rackproxy and run make.
+Go into `dep/rackproxy` and run `make`.
 
 ## Running
 
-Run ./rackproxy.{exe|lin|mac} to see help.
+Run `./rackproxy.{exe|lin|mac}` to see help.
 
-Try running e.g. ./rackproxy.mac plugin $HOME/Documents/Rack/plugins/AS (on a Mac) to see it in action, or e.g. ./rackproxy.mac plugins $HOME/Documents/Rack/plugins.
+Try running e.g. `./rackproxy.mac plugin $HOME/Documents/Rack/plugins/AS` (on a Mac) to see it in action, or e.g. `./rackproxy.mac plugins $HOME/Documents/Rack/plugins`.
 
-If you can help fix the code 126 plugin loading error on Windows you'll be my hero :-)
+If you can help fix the code 126 plugin loading error on Windows ([issue #2](https://github.com/rubyglow/racktool/issues/2)) you'll be my hero :-)
 
 ## Licenses
 
