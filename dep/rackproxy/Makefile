@@ -122,4 +122,5 @@ build/$(ARCH)/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+.PHONY: all clean test
 .DEFAULT_GOAL := all
