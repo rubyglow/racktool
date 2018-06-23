@@ -42,6 +42,12 @@ int main(int argc, char* argv[]) {
 		printBlurb();
 	}
 
+	// Print version info + usage and exit
+	else if(!strcmp(argv[1], "help") && argc == 2) {
+		printBlurb();
+		printf(USAGE);
+	}
+
 	// Print basic program and Rack defined info as JSON
 	else if(!strcmp(argv[1], "platform") && argc == 2) {
 		char *jsonStr = (new PlatformInfo())->serialize(); 
