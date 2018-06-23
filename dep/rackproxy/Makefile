@@ -99,7 +99,17 @@ DEPENDENCIES := $(patsubst %, build/$(ARCH)/%.d, $(SOURCES))
 RACK_OBJECTS = $(filter-out $(RACK_DIR)/build/src/main.cpp.o, $(wildcard $(RACK_DIR)/build/src/*.o $(RACK_DIR)/build/src/*/*.o))
 RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/build/dep/osdialog/*.o)
 
+# Convenience targets
+
+all: $(TARGET)
+
+test: $(TARGET)
+	./$< help
+	echo
+	./$< plugin core
+
 # Final targets
+
 $(TARGET): $(OBJECTS) $(RACK_OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
