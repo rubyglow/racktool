@@ -1,3 +1,4 @@
 [submodule "dep/rackproxy/dep/Rack"]
 	path = dep/rackproxy/dep/Rack
 	url = https://github.com/VCVRack/Rack.git
+	ignore = all
