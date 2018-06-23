@@ -103,6 +103,9 @@ RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/buil
 
 all: $(TARGET)
 
+clean:
+	rm -rfv build/$(ARCH) $(TARGET) dist
+
 test: $(TARGET)
 	./$< help
 	echo
@@ -118,10 +121,5 @@ $(TARGET): $(OBJECTS) $(RACK_OBJECTS)
 build/$(ARCH)/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-all: $(TARGET)
-
-clean:
-	rm -rfv build/$(ARCH) $(TARGET) dist
 
 .DEFAULT_GOAL := all
