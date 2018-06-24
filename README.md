@@ -2,44 +2,36 @@
 
 A very early days, work in progress tool, for eventually doing even more useful things with VCV Rack plugins. For now only the low-level tool (rackproxy) of a bigger software stack has been made.
 
+## Setting up your development environment
+
+The requirements for your development environment are identical to those of Rack. Please follow the instructions for [setting up your development environment](https://github.com/VCVRack/Rack/blob/v0.6.1/README.md#setting-up-your-development-environment), in the Rack README.
+
 ## Building
 
-First build Rack per the instructions at https://github.com/VCVRack/Rack/blob/v0.6.1/README.md but instead of `git clone https://github.com/VCVRack/Rack.git` and `cd Rack` - do:
+Building is fairly straight forward, and takes about as long as building Rack, since a local copy of Rack is built in the process.
+
+Make sure there are no spaces or unicode characters in the path you are building in, as this breaks many build systems.
+
+Run the following to fetch the source and build:
 
 ```
-git clone -b v0.6.1 https://github.com/VCVRack/Rack.git Rack-0.6.1
-cd Rack-0.6.1
+git clone https://github.com/rubyglow/racktool.git
+cd racktool
+git submodule update --init --recursive
+cd dep/rackproxy
+make -j dep
+make -j
 ```
-
-Verify it's working with `make run`.
-
-Then set the `RACK_DIR` variable pointing at the Rack code, the same way you would when building a plugin.
-
-Go into `dep/rackproxy` and run `make`.
 
 ## Running
 
-On Windows (only) you first need to - either copy `libwinpthread-1.dll`, `libstdc++-6.dll` and `libgcc_s_seh-1.dll`, from your `mingw64\bin\` directory of MSYS2 (I have it at `c:\msys2\mingw64\bin`) to the `dep/rackproxy` directory, or set your `PATH` to include the `mingw64\bin\` directory, e.g:
-`set PATH=c:\msys2\mingw64\bin;%PATH%`
+To test rackproxy run: `make test`
 
-Run `./rackproxy.{exe|lin|mac}` to see help.
+To load all your installed plugins: `./rackproxy plugins /path/to/Rack/plugins`
 
-To see it in action, try running e.g:\
-On a Mac:
-```
-./rackproxy.mac plugin $HOME/Documents/Rack/plugins/AS
-```
-or
-```
-./rackproxy.mac plugins $HOME/Documents/Rack/plugins
-```
+Right now, loading Rack plugins does not work on Windows, except for loading the core plugin. I'm working on it.
 
-Or on Windows:
-```
-rackproxy.exe plugin %USERPROFILE%\Documents\Rack\plugins\Fundamental
-```
-
-If you can help fix the code 126 plugin loading error on Windows ([issue #2](https://github.com/rubyglow/racktool/issues/2)) you'll be my hero :-)
+You can always run `./rackproxy help` to see usage information.
 
 ## Licenses
 
