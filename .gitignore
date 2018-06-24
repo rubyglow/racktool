@@ -3,3 +3,4 @@ dep/rackproxy/build
 dep/rackproxy/rackproxy*
 dep/rackproxy/experiments
 dep/rackproxy/dep/Rack
+dep/rackproxy/dep/TemplatePlugin

@@ -5,3 +5,4 @@
 [submodule "dep/rackproxy/dep/TemplatePlugin"]
 	path = dep/rackproxy/dep/TemplatePlugin
 	url = https://github.com/VCVRack/Template.git
+	ignore = all
