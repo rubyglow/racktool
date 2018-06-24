@@ -2,3 +2,6 @@
 	path = dep/rackproxy/dep/Rack
 	url = https://github.com/VCVRack/Rack.git
 	ignore = all
+[submodule "dep/rackproxy/dep/TemplatePlugin"]
+	path = dep/rackproxy/dep/TemplatePlugin
+	url = https://github.com/VCVRack/Template.git
