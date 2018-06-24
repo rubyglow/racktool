@@ -1,4 +1,4 @@
-RACK_DIR ?= Rack
+RACK_DIR = Rack
 
 all: rack
 
