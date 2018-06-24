@@ -1,5 +1,6 @@
 # Build dependencies of rackproxy
 
+.NOTPARALLEL:
 RACK_DIR = Rack
 
 all: rack template
