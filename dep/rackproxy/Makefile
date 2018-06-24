@@ -1,4 +1,5 @@
 # Build rackproxy
+
 # Usage:
 # make -j dep	Build dependencies (first)
 # make -j		Build rackproxy
@@ -111,8 +112,12 @@ clean:
 	rm -rfv build $(TARGET)
 
 test: $(TARGET)
+	echo
 	./$< help
+	echo
 	./$< plugin core
+	echo
+	./$< plugin $(realpath dep/TemplatePlugin)
 
 # Final targets
 
