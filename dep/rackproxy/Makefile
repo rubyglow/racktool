@@ -1,13 +1,14 @@
 # Build rackproxy
+# Usage:
+# make -j dep	Build dependencies (first)
+# make -j		Build rackproxy
+# make test		Run a few commands with rackproxy to verify it
+# make clean	Clean rackproxy build (not deps)
 
+RACK_DIR = dep/Rack
 VERSION = 0.6.0-beta.1
 RACK_VERSION = 0.6.1
 API_LEVEL = 0.6
-
-# Remember to: export RACK_DIR=/path/to/Rack-0.6.1 (the full Rack 0.6.1 sourcetree at tag v.0.6.1)
-ifndef RACK_DIR
-$(error RACK_DIR is not defined)
-endif
 
 # Detect architecture
 MACHINE = $(shell $(CC) -dumpmachine)
@@ -103,6 +104,9 @@ RACK_OBJECTS += $(wildcard $(RACK_DIR)/build/dep/nanovg/src/*.o $(RACK_DIR)/buil
 
 all: $(TARGET)
 
+dep:
+	$(MAKE) -C dep
+
 clean:
 	rm -rfv build/$(ARCH) $(TARGET) dist
 
@@ -122,5 +126,5 @@ build/$(ARCH)/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-.PHONY: all clean test
+.PHONY: all dep clean test
 .DEFAULT_GOAL := all
