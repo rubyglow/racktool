@@ -36,7 +36,7 @@ endif
 SOURCES += $(wildcard src/*.cpp)
 
 ifdef ARCH_MAC
-	TARGET := rackproxy.mac
+	TARGET := rackproxy
 	FLAGS += -DARCH_MAC
 	CXXFLAGS += -stdlib=libc++
 	MAC_SDK_FLAGS = -mmacosx-version-min=10.7
@@ -59,7 +59,7 @@ ifdef ARCH_WIN
 endif
 
 ifdef ARCH_LIN
-	TARGET := rackproxy.lin
+	TARGET := rackproxy
 	FLAGS += -DARCH_LIN
 	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
 	LDFLAGS += -rdynamic \
@@ -92,8 +92,8 @@ endif
 CXXFLAGS += -std=c++11 $(FLAGS)
 
 # Derive object files from sources and place them before user-defined objects
-OBJECTS := $(patsubst %, build/$(ARCH)/%.o, $(SOURCES))
-DEPENDENCIES := $(patsubst %, build/$(ARCH)/%.d, $(SOURCES))
+OBJECTS := $(patsubst %, build/%.o, $(SOURCES))
+DEPENDENCIES := $(patsubst %, build/%.d, $(SOURCES))
 
 # Link in all Rack object files, except for main.cpp.o
 # TODO: Trim to list of actually needed objects (unfortunately probably most)
@@ -108,11 +108,10 @@ dep:
 	$(MAKE) -C dep
 
 clean:
-	rm -rfv build/$(ARCH) $(TARGET) dist
+	rm -rfv build $(TARGET)
 
 test: $(TARGET)
 	./$< help
-	echo
 	./$< plugin core
 
 # Final targets
@@ -122,7 +121,7 @@ $(TARGET): $(OBJECTS) $(RACK_OBJECTS)
 
 -include $(DEPENDENCIES)
 
-build/$(ARCH)/%.cpp.o: %.cpp
+build/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
