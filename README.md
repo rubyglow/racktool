@@ -25,13 +25,13 @@ make -j
 
 ## Running
 
-To test rackproxy run: `make test`
+To run a quick test of rackproxy: `make test`
 
 To load all your installed plugins: `./rackproxy plugins /path/to/Rack/plugins`
 
-Right now, loading Rack plugins does not work on Windows, except for loading the core plugin. I'm working on it.
-
 You can always run `./rackproxy help` to see usage information.
+
+At the moment, on Windows, you need to substitute `./rackproxy` with `./rack`. It works but I'm looking into ways of fixing this, if at all possible.
 
 ## Licenses
 

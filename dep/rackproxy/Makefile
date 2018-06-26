@@ -52,9 +52,12 @@ ifdef ARCH_MAC
 endif
 
 ifdef ARCH_WIN
-	TARGET := rackproxy.exe
+	# Rack plugins on Windows have a hard-dependency on "rack.exe"
+	# It would be nice to "fix" this somehow (issue #2)
+	TARGET := rack.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
 	LDFLAGS += -static \
+		-Wl,--export-all-symbols \
 		-lglew32 -lglfw3 -ljansson -lspeexdsp -lzip -lz -lcurl -lssl -lcrypto -lrtaudio -lrtmidi \
 		-lpthread -lopengl32 -lgdi32 -lws2_32 -lcomdlg32 -lole32 -ldsound -lwinmm -lksuser -lshlwapi
 endif

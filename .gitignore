@@ -1,6 +1,6 @@
 .DS_Store
 dep/rackproxy/build
-dep/rackproxy/rackproxy*
+dep/rackproxy/rack*
 dep/rackproxy/experiments
 dep/rackproxy/dep/Rack
 dep/rackproxy/dep/TemplatePlugin
