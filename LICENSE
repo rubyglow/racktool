@@ -3,8 +3,6 @@ BSD 3-Clause License
 Copyright (c) 2018, Lars Bjerregaard.
 All rights reserved.
 
-The code in dep/rackproxy uses code from VCV Rack, Copyright (c) 2016 Andrew Belt.
-
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
