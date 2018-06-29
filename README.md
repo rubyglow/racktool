@@ -31,7 +31,7 @@ To load all your installed plugins: `./rackproxy plugins /path/to/Rack/plugins`
 
 You can always run `./rackproxy help` to see usage information.
 
-At the moment, on Windows, you need to substitute `./rackproxy` with `./rack`. It works but I'm looking into ways of fixing this, if at all possible.
+On Windows `rackproxy.exe` is by necessity called `rack.exe` instead ([issue #3](issues/3)). I'll see if there's a fix for that.
 
 ## Licenses
 
