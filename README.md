@@ -31,7 +31,7 @@ To load all your installed plugins: `./rackproxy plugins /path/to/Rack/plugins`
 
 You can always run `./rackproxy help` to see usage information.
 
-On Windows `rackproxy.exe` is by necessity called `rack.exe` instead ([issue #3](/rubyglow/racktool/issues/3)). I'll see if there's a fix for that.
+On Windows `rackproxy.exe` is by necessity called `rack.exe` instead ([issue #3](//github.com/rubyglow/racktool/issues/3)). I'll see if there's a fix for that.
 
 ## Licenses
 
