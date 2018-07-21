@@ -12,7 +12,7 @@ char* ModuleTags::serialize() {
 	json_t *tagsJson = json_array();
 	
 	for (std::string tag : gTagNames) {
-		json_array_append(tagsJson, json_string(tag.c_str()));
+		if (!tag.empty()) json_array_append(tagsJson, json_string(tag.c_str()));
 	}
 
 	return json_dumps(tagsJson, 0);
