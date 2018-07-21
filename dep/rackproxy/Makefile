@@ -33,6 +33,8 @@ else
 $(error Could not determine architecture of $(MACHINE))
 endif
 
+STRIP ?= strip
+
 # Add .cpp and .c files to the build
 SOURCES += $(wildcard src/*.cpp)
 
@@ -128,6 +130,26 @@ test: $(TARGET)
 	echo
 	./$< plugin dep/TemplatePlugin
 
+dist: all
+	rm -rf dist
+	mkdir -p dist
+	mkdir -p dist/racktool
+	cp ../../LICENSE* ../../README* dist/racktool/
+	cp $(TARGET) dist/racktool/
+ifdef ARCH_MAC
+	$(STRIP) -S dist/racktool/$(TARGET)
+endif
+ifdef ARCH_WIN
+	$(STRIP) -s dist/racktool/$(TARGET)
+	cp /mingw64/bin/libwinpthread-1.dll dist/racktool/
+	cp /mingw64/bin/libstdc++-6.dll dist/racktool/
+	cp /mingw64/bin/libgcc_s_seh-1.dll dist/racktool/
+endif
+ifdef ARCH_LIN
+	$(STRIP) -s dist/racktool/$(TARGET)
+endif
+	cd dist && zip -9 -r racktool-$(VERSION)-$(ARCH).zip racktool
+
 # Final targets
 
 $(TARGET): $(OBJECTS) $(RACK_OBJECTS)
@@ -139,5 +161,5 @@ build/%.cpp.o: %.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-.PHONY: all dep clean test
+.PHONY: all dep clean test dist
 .DEFAULT_GOAL := all
