@@ -7,7 +7,7 @@
 # make clean	Clean rackproxy build (not deps)
 
 RACK_DIR = dep/Rack
-VERSION = 0.6.0-beta.1
+VERSION = 0.6.0-alpha1
 RACK_VERSION = 0.6.1
 API_LEVEL = 0.6
 
