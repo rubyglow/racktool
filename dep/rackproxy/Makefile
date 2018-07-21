@@ -114,7 +114,7 @@ dep:
 	$(MAKE) -C dep
 
 clean:
-	rm -rfv build $(TARGET)
+	rm -rfv build dist $(TARGET)
 
 test: $(TARGET)
 	echo
