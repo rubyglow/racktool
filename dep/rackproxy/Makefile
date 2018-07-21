@@ -116,11 +116,17 @@ clean:
 
 test: $(TARGET)
 	echo
+	./$< version
+	echo
 	./$< help
+	echo
+	./$< platform
+	echo
+	./$< tags
 	echo
 	./$< plugin core
 	echo
-	./$< plugin $(realpath dep/TemplatePlugin)
+	./$< plugin dep/TemplatePlugin
 
 # Final targets
 
