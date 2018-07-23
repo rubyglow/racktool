@@ -8,8 +8,8 @@
 # make clean            Clean rackproxy build (not deps)
 
 RACK_DIR = dep/Rack
-VERSION = 0.6.0-alpha1
-RACK_VERSION = 0.6.1
+VERSION = 0.6.0-alpha2
+RACK_VERSION = 0.6.2b
 API_LEVEL = 0.6
 
 # Detect architecture
