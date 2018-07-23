@@ -118,17 +118,17 @@ clean:
 	rm -rfv build dist $(TARGET)
 
 test: $(TARGET)
-	echo
+	@echo
 	./$< version
-	echo
+	@echo
 	./$< help
-	echo
+	@echo
 	./$< platform
-	echo
+	@echo
 	./$< tags
-	echo
+	@echo
 	./$< plugin core
-	echo
+	@echo
 	./$< plugin dep/TemplatePlugin
 
 dist: all
