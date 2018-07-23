@@ -1,10 +1,11 @@
 # Build rackproxy
 
 # Usage:
-# make -j dep	Build dependencies (first)
-# make -j		Build rackproxy
-# make test		Run a few commands with rackproxy to verify it
-# make clean	Clean rackproxy build (not deps)
+# On Mac use $(sysctl -n hw.ncpu) instead of $(nproc)
+# make -j$(nproc) dep   Build dependencies (first)
+# make -j$(nproc)       Build rackproxy
+# make test             Run a few commands with rackproxy to verify it
+# make clean            Clean rackproxy build (not deps)
 
 RACK_DIR = dep/Rack
 VERSION = 0.6.0-alpha1
@@ -55,7 +56,7 @@ endif
 
 ifdef ARCH_WIN
 	# Rack plugins on Windows have a hard-dependency on "rack.exe"
-	# It would be nice to "fix" this somehow (issue #2)
+	# It would be nice to "fix" this somehow (issue #3)
 	TARGET := rack.exe
 	FLAGS += -DARCH_WIN -D_USE_MATH_DEFINES
 	LDFLAGS += -static \
