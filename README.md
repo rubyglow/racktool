@@ -8,7 +8,7 @@ You don't need to build racktool yourself to play with it. Binary packages are a
 
 ## Setting up your development environment
 
-The requirements for your development environment are identical to those of Rack. Please follow the instructions for [setting up your development environment](https://github.com/VCVRack/Rack/blob/v0.6.1/README.md#setting-up-your-development-environment), in the Rack README.
+The requirements for your development environment are identical to those of Rack. Please follow the instructions for [setting up your development environment](https://github.com/VCVRack/Rack/blob/v0.6.2b/README.md#setting-up-your-development-environment), in the Rack README.
 
 ## Building
 
